@@ -1,4 +1,4 @@
-package ru.slobodchikov.xmltocsv.XmltoCsv.config;
+package ru.slobodchikov.xmltocsv.xmltocsv.config;
 
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
@@ -12,8 +12,7 @@ public class SpMVCDisSerIn extends AbstractAnnotationConfigDispatcherServletInit
     }
     @Override
     protected Class<?>[] getServletConfigClasses() {
-        return new Class[] {
-                SpringConfig.class};
+        return new Class[] {SpringConfig.class};
     }
 
     @Override

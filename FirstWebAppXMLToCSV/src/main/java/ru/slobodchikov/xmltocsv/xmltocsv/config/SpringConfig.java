@@ -1,4 +1,4 @@
-package ru.slobodchikov.xmltocsv.XmltoCsv.config;
+package ru.slobodchikov.xmltocsv.xmltocsv.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -12,13 +12,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
-import ru.slobodchikov.xmltocsv.XmltoCsv.XmlToCsv;
-import ru.slobodchikov.xmltocsv.XmltoCsv.controllers.CsvFile;
-import ru.slobodchikov.xmltocsv.XmltoCsv.controllers.XmlFile;
+import ru.slobodchikov.xmltocsv.xmltocsv.Metal;
+import ru.slobodchikov.xmltocsv.xmltocsv.Metals;
+import ru.slobodchikov.xmltocsv.xmltocsv.XmlToCsv;
+import ru.slobodchikov.xmltocsv.xmltocsv.controllers.XmlFile;
+
+import java.util.ArrayList;
 
 
 @Configuration
-@ComponentScan("ru.slobodchikov.xmltocsv.XmltoCsv")
+@ComponentScan("ru.slobodchikov.xmltocsv.xmltocsv")
 @EnableWebMvc
 public class SpringConfig implements WebMvcConfigurer {
     private final ApplicationContext applicationContext;
@@ -50,15 +53,22 @@ public class SpringConfig implements WebMvcConfigurer {
         return multipartResolver;
     }
     @Bean
-    public XmlToCsv xmlToCsv() {
-        XmlToCsv xmlToCsv=new XmlToCsv();
-        return xmlToCsv;
+    public XmlFile xmlFile() {
+        XmlFile xmlFile=new XmlFile();
+        xmlFile.setXmlToCsv(new XmlToCsv());
+        return xmlFile;
     }
     @Bean
-    public CsvFile csvFile() {
-        CsvFile csvFile=new CsvFile();
-        csvFile.setXmlToCsv(xmlToCsv());
-        return csvFile;
+    public XmlToCsv xmlToCsv() {
+         XmlToCsv xmlToCsv=new XmlToCsv();
+         xmlToCsv.setMetals(new Metals());
+         return xmlToCsv;
+    }
+    @Bean
+    public Metals metals() {
+        Metals metals=new Metals();
+        metals.setMetals(new ArrayList<Metal>());
+        return metals;
     }
     @Override
     public void configureViewResolvers(ViewResolverRegistry registry) {
