@@ -1,11 +1,12 @@
-package ru.slobodchikov.xmltocsv.xmltocsv;
+package ru.slobodchikov.xmltocsv.xmltocsv.structclasses;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+
 @XmlRootElement(name = "Металл")
-@XmlType(propOrder = { "id","name", "ps","melting_temperature","boiling_temperature","heat_capacity","density","atomic_mass" })
+@XmlType(propOrder = {"id", "name", "ps", "melting_temperature", "boiling_temperature", "heat_capacity", "density", "atomic_mass"})
 public class Metal {
     private long id;
     private String name;
@@ -15,6 +16,7 @@ public class Metal {
     private int heat_capacity;
     private int density;
     private int atomic_mass;
+
     public Metal() {
 
     }
@@ -91,7 +93,7 @@ public class Metal {
         this.atomic_mass = atomic_mass;
     }
 
-    public Metal Copy() {
+    public Metal copy() {
         Metal metal = new Metal();
         metal.setAtomic_mass(getAtomic_mass());
         metal.setDensity(getDensity());

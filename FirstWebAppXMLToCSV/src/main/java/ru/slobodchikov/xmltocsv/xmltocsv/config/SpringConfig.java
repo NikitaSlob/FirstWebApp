@@ -12,10 +12,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
-import ru.slobodchikov.xmltocsv.xmltocsv.Metal;
-import ru.slobodchikov.xmltocsv.xmltocsv.Metals;
-import ru.slobodchikov.xmltocsv.xmltocsv.XmlToCsv;
-import ru.slobodchikov.xmltocsv.xmltocsv.controllers.XmlFile;
+import ru.slobodchikov.xmltocsv.xmltocsv.structclasses.Metals;
+import ru.slobodchikov.xmltocsv.xmltocsv.sevice.XmlToCsv;
 
 import java.util.ArrayList;
 
@@ -25,51 +23,50 @@ import java.util.ArrayList;
 @EnableWebMvc
 public class SpringConfig implements WebMvcConfigurer {
     private final ApplicationContext applicationContext;
+
     @Autowired
     public SpringConfig(ApplicationContext applicationContext) {
-        this.applicationContext=applicationContext;
+        this.applicationContext = applicationContext;
     }
-
     @Bean
     public SpringResourceTemplateResolver templateResolver() {
-        SpringResourceTemplateResolver templateResolver=new SpringResourceTemplateResolver();
+        SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
         templateResolver.setApplicationContext(applicationContext);
         templateResolver.setPrefix("WEB-INF/Views/");
         templateResolver.setSuffix(".html");
-        //templateResolver.setCharacterEncoding("UTF-8");
+        templateResolver.setCharacterEncoding("UTF-8");
         return templateResolver;
     }
+
     @Bean
     public SpringTemplateEngine templateEngine() {
-        SpringTemplateEngine templateEngine=new SpringTemplateEngine();
+        SpringTemplateEngine templateEngine = new SpringTemplateEngine();
         templateEngine.setTemplateResolver(templateResolver());
         templateEngine.setEnableSpringELCompiler(true);
         return templateEngine;
     }
+
     @Bean
     public CommonsMultipartResolver multipartResolver() {
-        CommonsMultipartResolver multipartResolver=new CommonsMultipartResolver();
+        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
         multipartResolver.setMaxUploadSize(200000);
         return multipartResolver;
     }
-    @Bean
-    public XmlFile xmlFile() {
-        XmlFile xmlFile=new XmlFile();
-        xmlFile.setXmlToCsv(new XmlToCsv());
-        return xmlFile;
-    }
+
     @Bean
     public XmlToCsv xmlToCsv() {
-         XmlToCsv xmlToCsv=new XmlToCsv();
-         xmlToCsv.setMetals(new Metals());
-         return xmlToCsv;
+        XmlToCsv xmlToCsv = new XmlToCsv();
+        xmlToCsv.setMetals(new Metals());
+        return xmlToCsv;
     }
+
     @Bean
     public Metals metals() {
-        Metals metals=new Metals();
-        metals.setMetals(new ArrayList<Metal>());
+        Metals metals = new Metals();
+        metals.setMetals(new ArrayList<>());
         return metals;
     }
+
     @Override
     public void configureViewResolvers(ViewResolverRegistry registry) {
         ThymeleafViewResolver resolver = new ThymeleafViewResolver();

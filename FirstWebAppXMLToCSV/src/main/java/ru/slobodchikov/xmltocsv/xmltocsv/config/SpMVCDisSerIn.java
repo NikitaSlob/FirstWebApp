@@ -10,13 +10,14 @@ public class SpMVCDisSerIn extends AbstractAnnotationConfigDispatcherServletInit
     protected Class<?>[] getRootConfigClasses() {
         return null;
     }
+
     @Override
     protected Class<?>[] getServletConfigClasses() {
-        return new Class[] {SpringConfig.class};
+        return new Class[]{SpringConfig.class};
     }
 
     @Override
     protected String[] getServletMappings() {
-        return new String[] {"/"};
+        return new String[]{"/"};
     }
 }
