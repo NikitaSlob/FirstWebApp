@@ -57,8 +57,8 @@ public class XmlToCsv {
 
     private void writeToCsvFile(OutputStream outputStream) {
         try {
-            StringWriter stringWriter = new StringWriter();
-            ICsvBeanWriter csvBeanWriter = new CsvBeanWriter(stringWriter, CsvPreference.TAB_PREFERENCE);
+            final StringWriter stringWriter = new StringWriter();
+            final ICsvBeanWriter csvBeanWriter = new CsvBeanWriter(stringWriter, CsvPreference.TAB_PREFERENCE);
             String[] header = new String[]{"Название", "Пс", "Температура_плавления", "Температура_кипения", "Теплоемкость", "Плотность", "Атомная_масса"};
             csvBeanWriter.writeHeader(header);
             header = new String[]{"name", "ps", "melting_temperature", "boiling_temperature", "heat_capacity", "density", "atomic_mass"};
@@ -66,13 +66,14 @@ public class XmlToCsv {
                 csvBeanWriter.write(metal, header);
             }
             csvBeanWriter.close();
-            byte[] bytes = stringWriter.toString().getBytes();
+            final byte[] bytes = stringWriter.toString().getBytes();
             outputStream.write(bytes);
         } catch (IOException e) {
             logger.debug(e.getMessage());
         }
     }
-    public void transform(InputStream inputStream,OutputStream outputStream) throws JAXBException {
+
+    public void transform(InputStream inputStream, OutputStream outputStream) throws JAXBException {
         xmlReader(inputStream);
         metalSort();
         filter();
