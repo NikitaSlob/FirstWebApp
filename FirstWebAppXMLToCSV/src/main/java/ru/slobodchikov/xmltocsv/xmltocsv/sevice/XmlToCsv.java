@@ -10,13 +10,15 @@ import javax.xml.bind.Unmarshaller;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.supercsv.io.CsvBeanWriter;
 import org.supercsv.io.ICsvBeanWriter;
 
 import org.supercsv.prefs.CsvPreference;
-import ru.slobodchikov.xmltocsv.xmltocsv.structclasses.Metal;
-import ru.slobodchikov.xmltocsv.xmltocsv.structclasses.Metals;
+import ru.slobodchikov.xmltocsv.xmltocsv.jaxbclasses.Metal;
+import ru.slobodchikov.xmltocsv.xmltocsv.jaxbclasses.Metals;
 
+@Service
 public class XmlToCsv {
     public void setMetals(Metals metals) {
         this.metals = metals;
@@ -24,8 +26,8 @@ public class XmlToCsv {
 
     private static final Logger logger = LoggerFactory.getLogger(XmlToCsv.class);
     @Value("${metals.filter.minmt}")
-    int minMt;
-    Metals metals;
+    private int minMt;
+    private Metals metals;
 
     private void xmlReader(InputStream inputStream) throws JAXBException {
         JAXBContext context = JAXBContext.newInstance(Metals.class);

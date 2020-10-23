@@ -1,4 +1,4 @@
-package ru.slobodchikov.xmltocsv.xmltocsv.structclasses;
+package ru.slobodchikov.xmltocsv.xmltocsv.jaxbclasses;
 
 import javax.xml.bind.annotation.*;
 import java.util.List;

@@ -12,10 +12,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
-import ru.slobodchikov.xmltocsv.xmltocsv.structclasses.Metals;
-import ru.slobodchikov.xmltocsv.xmltocsv.sevice.XmlToCsv;
-
-import java.util.ArrayList;
 
 
 @Configuration
@@ -45,27 +41,6 @@ public class SpringConfig implements WebMvcConfigurer {
         templateEngine.setTemplateResolver(templateResolver());
         templateEngine.setEnableSpringELCompiler(true);
         return templateEngine;
-    }
-
-    @Bean
-    public CommonsMultipartResolver multipartResolver() {
-        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-        multipartResolver.setMaxUploadSize(200000);
-        return multipartResolver;
-    }
-
-    @Bean
-    public XmlToCsv xmlToCsv() {
-        XmlToCsv xmlToCsv = new XmlToCsv();
-        xmlToCsv.setMetals(new Metals());
-        return xmlToCsv;
-    }
-
-    @Bean
-    public Metals metals() {
-        Metals metals = new Metals();
-        metals.setMetals(new ArrayList<>());
-        return metals;
     }
 
     @Override
