@@ -11,8 +11,14 @@ import ru.slobodchikov.xmltocsv.xmltocsv.sevice.XmlToCsv;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 
+/**
+ * Контроллер для преобазования файла xml в csv
+ */
 @Controller
 class XmlFile {
+    /**
+     * Класс для преобразования
+     */
     private final XmlToCsv xmlToCsv;
     private static final Logger logger = LoggerFactory.getLogger(XmlFile.class);
 

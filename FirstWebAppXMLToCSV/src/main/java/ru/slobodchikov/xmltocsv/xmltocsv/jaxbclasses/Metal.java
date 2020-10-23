@@ -5,6 +5,9 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+/**
+ * Класс для храненя поля
+ */
 @XmlRootElement(name = "Металл")
 @XmlType(propOrder = {"id", "name", "ps", "melting_temperature", "boiling_temperature", "heat_capacity", "density", "atomic_mass"})
 public class Metal {

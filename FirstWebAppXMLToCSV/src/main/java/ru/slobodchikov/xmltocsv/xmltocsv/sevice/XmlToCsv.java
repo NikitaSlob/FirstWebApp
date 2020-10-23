@@ -18,6 +18,9 @@ import org.supercsv.prefs.CsvPreference;
 import ru.slobodchikov.xmltocsv.xmltocsv.jaxbclasses.Metal;
 import ru.slobodchikov.xmltocsv.xmltocsv.jaxbclasses.Metals;
 
+/**
+ * Основной класс преобразования
+ */
 @Service
 public class XmlToCsv {
     public void setMetals(Metals metals) {
@@ -25,16 +28,30 @@ public class XmlToCsv {
     }
 
     private static final Logger logger = LoggerFactory.getLogger(XmlToCsv.class);
+    /**
+     * Минимальныя значение поля для фильтрации записей
+     */
     @Value("${metals.filter.minmt}")
     private int minMt;
+    /**
+     * Класс для сериализация
+     */
     private Metals metals;
 
+    /**
+     * Получения класса из файла xml
+     * @param inputStream поток из файла
+     * @throws JAXBException ошибка получения класса из файла
+     */
     private void xmlReader(InputStream inputStream) throws JAXBException {
         JAXBContext context = JAXBContext.newInstance(Metals.class);
         Unmarshaller um = context.createUnmarshaller();
         this.metals = (Metals) um.unmarshal(inputStream);
     }
 
+    /**
+     * удаление записей у которых melting_temperature меньше minMt
+     */
     private void filter() {
         for (int indexi = 0; indexi < metals.getMetals().size(); indexi++) {
             if (metals.getMetals().get(indexi).getMelting_temperature() < minMt) {
@@ -44,6 +61,9 @@ public class XmlToCsv {
         }
     }
 
+    /**
+     * Сортировка по возростанию density
+     */
     private void metalSort() {
         for (int indexi = metals.getMetals().size() - 1; indexi >= 1; indexi--) {
             for (int indexj = 0; indexj < indexi; indexj++) {
@@ -57,6 +77,10 @@ public class XmlToCsv {
         }
     }
 
+    /**
+     * Запись в csv файл
+     * @param outputStream поток записи в файл
+     */
     private void writeToCsvFile(OutputStream outputStream) {
         try {
             final StringWriter stringWriter = new StringWriter();
@@ -75,6 +99,12 @@ public class XmlToCsv {
         }
     }
 
+    /**
+     * Публичный метод для чтения, измения и записи полей
+     * @param inputStream поток чтения из файла
+     * @param outputStream поток для записи из файла
+     * @throws JAXBException ошибка чтения из метода xmlRearer
+     */
     public void transform(InputStream inputStream, OutputStream outputStream) throws JAXBException {
         xmlReader(inputStream);
         metalSort();
