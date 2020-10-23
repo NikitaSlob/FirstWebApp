@@ -15,13 +15,12 @@ import org.supercsv.io.CsvBeanWriter;
 import org.supercsv.io.ICsvBeanWriter;
 
 import org.supercsv.prefs.CsvPreference;
-import ru.slobodchikov.xmltocsv.xmltocsv.jaxbclasses.Metal;
-import ru.slobodchikov.xmltocsv.xmltocsv.jaxbclasses.Metals;
-
-/**
- * Основной класс преобразования
- */
+import ru.slobodchikov.xmltocsv.xmltocsv.jaxb.Metal;
+import ru.slobodchikov.xmltocsv.xmltocsv.jaxb.Metals;
 @Service
+/**
+ * Основной сервис преобразования
+ */
 public class XmlToCsv {
     public void setMetals(Metals metals) {
         this.metals = metals;
@@ -94,8 +93,8 @@ public class XmlToCsv {
             csvBeanWriter.close();
             final byte[] bytes = stringWriter.toString().getBytes();
             outputStream.write(bytes);
-        } catch (IOException e) {
-            logger.debug(e.getMessage());
+        } catch (IOException exception) {
+            logger.error("Вам не удалось загрузить файл", exception);
         }
     }
 

@@ -1,10 +1,10 @@
-package ru.slobodchikov.xmltocsv.xmltocsv.jaxbclasses;
+package ru.slobodchikov.xmltocsv.xmltocsv.jaxb;
 
 import javax.xml.bind.annotation.*;
 import java.util.List;
 
 /**
- * Класс для хранения массива полей
+ * хранение массива полей
  */
 @XmlRootElement(name = "Металлы")
 public class Metals {

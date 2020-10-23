@@ -1,4 +1,4 @@
-package ru.slobodchikov.xmltocsv.xmltocsv.jaxbclasses;
+package ru.slobodchikov.xmltocsv.xmltocsv.jaxb;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * Класс для храненя поля
+ * Содержание поля
  */
 @XmlRootElement(name = "Металл")
 @XmlType(propOrder = {"id", "name", "ps", "melting_temperature", "boiling_temperature", "heat_capacity", "density", "atomic_mass"})

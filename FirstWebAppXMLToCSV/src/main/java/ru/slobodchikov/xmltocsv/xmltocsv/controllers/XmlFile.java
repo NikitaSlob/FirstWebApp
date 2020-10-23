@@ -2,14 +2,17 @@ package ru.slobodchikov.xmltocsv.xmltocsv.controllers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import ru.slobodchikov.xmltocsv.xmltocsv.sevice.XmlToCsv;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * Контроллер для преобазования файла xml в csv
@@ -50,10 +53,10 @@ class XmlFile {
                 outputStream.close();
                 response.flushBuffer();
             } catch (IOException exception) {
-                logger.error("Вам не удалось загрузить файл => " + exception.toString(), exception);
+                logger.error("Вам не удалось загрузить файл", exception);
             }
         } catch (Exception exception) {
-            logger.error("Вам не удалось загрузить файл => " + exception.toString(), exception);
+            logger.error("Вам не удалось загрузить файл", exception);
         }
     }
 
