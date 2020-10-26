@@ -1,6 +1,10 @@
 package ru.slobodchikov.xmltocsv.xmltocsv.sevice;
 
 import java.io.*;
+import java.sql.Array;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 
@@ -17,6 +21,7 @@ import org.supercsv.io.ICsvBeanWriter;
 import org.supercsv.prefs.CsvPreference;
 import ru.slobodchikov.xmltocsv.xmltocsv.jaxb.Metal;
 import ru.slobodchikov.xmltocsv.xmltocsv.jaxb.Metals;
+
 @Service
 /**
  * Основной сервис преобразования
@@ -39,6 +44,7 @@ public class XmlToCsv {
 
     /**
      * Получения класса из файла xml
+     *
      * @param inputStream поток из файла
      * @throws JAXBException ошибка получения класса из файла
      */
@@ -52,59 +58,43 @@ public class XmlToCsv {
      * удаление записей у которых melting_temperature меньше minMt
      */
     private void filter() {
-        for (int indexi = 0; indexi < metals.getMetals().size(); indexi++) {
-            if (metals.getMetals().get(indexi).getMelting_temperature() < minMt) {
-                metals.getMetals().remove(indexi);
-                indexi--;
-            }
-        }
+        metals.setMetals(metals.getMetals().stream().filter(x -> x.getMelting_temperature() > minMt).collect(Collectors.toList()));
     }
 
     /**
      * Сортировка по возростанию density
      */
     private void metalSort() {
-        for (int indexi = metals.getMetals().size() - 1; indexi >= 1; indexi--) {
-            for (int indexj = 0; indexj < indexi; indexj++) {
-                if (metals.getMetals().get(indexj).getDensity() > metals.getMetals().get(indexj + 1).getDensity()) {
-                    Metal temp;
-                    temp = metals.getMetals().get(indexj).copy();
-                    metals.getMetals().set(indexj, metals.getMetals().get(indexj + 1).copy());
-                    metals.getMetals().set(indexj + 1, temp.copy());
-                }
-            }
-        }
+        metals.getMetals().sort(Comparator.comparingInt(Metal::getDensity));
     }
 
     /**
      * Запись в csv файл
+     *
      * @param outputStream поток записи в файл
      */
-    private void writeToCsvFile(OutputStream outputStream) {
-        try {
-            final StringWriter stringWriter = new StringWriter();
-            final ICsvBeanWriter csvBeanWriter = new CsvBeanWriter(stringWriter, CsvPreference.TAB_PREFERENCE);
-            String[] header = new String[]{"Название", "Пс", "Температура_плавления", "Температура_кипения", "Теплоемкость", "Плотность", "Атомная_масса"};
-            csvBeanWriter.writeHeader(header);
-            header = new String[]{"name", "ps", "melting_temperature", "boiling_temperature", "heat_capacity", "density", "atomic_mass"};
-            for (Metal metal : metals.getMetals()) {
-                csvBeanWriter.write(metal, header);
+    private void writeToCsvFile(OutputStream outputStream) throws IOException {
+        try (final StringWriter stringWriter = new StringWriter()) {
+            try (final ICsvBeanWriter csvBeanWriter = new CsvBeanWriter(stringWriter, CsvPreference.TAB_PREFERENCE)) {
+                final String[] header = new String[]{"Название", "Пс", "Температура_плавления", "Температура_кипения", "Теплоемкость", "Плотность", "Атомная_масса"};
+                csvBeanWriter.writeHeader(header);
+                final String[] value = new String[]{"name", "ps", "melting_temperature", "boiling_temperature", "heat_capacity", "density", "atomic_mass"};
+                for (Metal metal : metals.getMetals()) {
+                    csvBeanWriter.write(metal, value);
+                }
+                outputStream.write(stringWriter.toString().getBytes());
             }
-            csvBeanWriter.close();
-            final byte[] bytes = stringWriter.toString().getBytes();
-            outputStream.write(bytes);
-        } catch (IOException exception) {
-            logger.error("Вам не удалось загрузить файл", exception);
         }
     }
 
     /**
      * Публичный метод для чтения, измения и записи полей
-     * @param inputStream поток чтения из файла
+     *
+     * @param inputStream  поток чтения из файла
      * @param outputStream поток для записи из файла
-     * @throws JAXBException ошибка чтения из метода xmlRearer
+     * @throws JAXBException ошибка чтения из метода xmlReader
      */
-    public void transform(InputStream inputStream, OutputStream outputStream) throws JAXBException {
+    public void transform(InputStream inputStream, OutputStream outputStream) throws JAXBException, IOException {
         xmlReader(inputStream);
         metalSort();
         filter();
