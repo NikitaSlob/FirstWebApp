@@ -1,5 +1,6 @@
 package ru.slobodchikov.xmltocsv.xmltocsv.controllers;
 
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -35,7 +36,7 @@ class XmlFile {
     }
 
     /**
-     * @param file - файл который нужно изменить
+     * @param file     - файл который нужно изменить
      * @param response - ответ http
      */
     @PostMapping(value = "/upload", produces = "text/csv;charset=UTF-8")
@@ -50,7 +51,6 @@ class XmlFile {
                 response.setContentType("text/csv");
                 response.setHeader("Content-Disposition", "attachment; filename=" + "metals.csv");
                 response.setHeader("Content-Transfer-Encoding", "binary");
-                outputStream.close();
                 response.flushBuffer();
             } catch (IOException exception) {
                 logger.error("Вам не удалось загрузить файл", exception);

@@ -1,18 +1,13 @@
 package ru.slobodchikov.xmltocsv.xmltocsv.sevice;
 
 import java.io.*;
-import java.sql.Array;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.stream.Collectors;
-
-import org.slf4j.Logger;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.supercsv.io.CsvBeanWriter;
@@ -31,7 +26,6 @@ public class XmlToCsv {
         this.metals = metals;
     }
 
-    private static final Logger logger = LoggerFactory.getLogger(XmlToCsv.class);
     /**
      * Минимальныя значение поля для фильтрации записей
      */
@@ -58,7 +52,9 @@ public class XmlToCsv {
      * удаление записей у которых melting_temperature меньше minMt
      */
     private void filter() {
-        metals.setMetals(metals.getMetals().stream().filter(x -> x.getMelting_temperature() > minMt).collect(Collectors.toList()));
+        metals.setMetals(metals.getMetals().stream()
+                .filter(x -> x.getMelting_temperature() > minMt)
+                .collect(Collectors.toList()));
     }
 
     /**
@@ -73,17 +69,17 @@ public class XmlToCsv {
      *
      * @param outputStream поток записи в файл
      */
-    private void writeToCsvFile(OutputStream outputStream) throws IOException {
-        try (final StringWriter stringWriter = new StringWriter()) {
-            try (final ICsvBeanWriter csvBeanWriter = new CsvBeanWriter(stringWriter, CsvPreference.TAB_PREFERENCE)) {
-                final String[] header = new String[]{"Название", "Пс", "Температура_плавления", "Температура_кипения", "Теплоемкость", "Плотность", "Атомная_масса"};
-                csvBeanWriter.writeHeader(header);
-                final String[] value = new String[]{"name", "ps", "melting_temperature", "boiling_temperature", "heat_capacity", "density", "atomic_mass"};
-                for (Metal metal : metals.getMetals()) {
-                    csvBeanWriter.write(metal, value);
-                }
-                outputStream.write(stringWriter.toString().getBytes());
+    private void writeToCsvFile(final OutputStream outputStream) throws IOException {
+        try (final StringWriter stringWriter = new StringWriter();
+             final ICsvBeanWriter csvBeanWriter = new CsvBeanWriter(stringWriter, CsvPreference.TAB_PREFERENCE);
+                /*final OutputStreamWriter outputStreamWriter=new OutputStreamWriter(outputStream)*/) {
+            csvBeanWriter.writeHeader("Название", "Пс", "Температура_плавления", "Температура_кипения", "Теплоемкость", "Плотность", "Атомная_масса");
+            for (Metal metal : metals.getMetals()) {
+                csvBeanWriter.write(metal, "name", "ps", "melting_temperature", "boiling_temperature", "heat_capacity", "density", "atomic_mass");
             }
+            csvBeanWriter.close();
+            outputStream.write(stringWriter.toString().getBytes());
+            //outputStreamWriter.write(stringWriter.toString());
         }
     }
 
